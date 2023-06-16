@@ -9,16 +9,15 @@ black = 0,0,0
 
 # Physics classes
 class Body():
-    def __init__(self, name, image):
+    def __init__(self, image):
         # Setting variables
-        self.name = name
         self.image = pygame.image.load(image)
         # Setting physics
         self.speed = [0,0]
         self.collider = self.image.get_rect()
 
     def move(self):
-        self.collider.move(self.speed)
+        self.motion = self.collider.move(self.speed)
 
 # UI classes
 class Screen():
@@ -41,7 +40,7 @@ class Screen():
         self.canvas.fill(black)
         # Drawing Objects
         for object in objects:
-            self.canvas.blit(object.image, object.collider)
+            self.canvas.blit(object.image, object.motion)
         # Displaying Canvas
         window.flip()
 
