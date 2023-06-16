@@ -46,10 +46,16 @@ class Screen():
         window.flip()
 
 class Macro():
-    def __init__(self, name, key):# Creating key macro
+    def __init__(self, key):# Creating key macro
         # Setting Variables
-        self.name = name
         self.key = self.alias[key]
+
+    def is_pressed(self):
+        key = pygame.key.get_pressed()
+        if key[self.key]:
+            return True
+        else:
+            return False
 
     alias = {
     # Letters keys
