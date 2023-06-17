@@ -1,29 +1,19 @@
 # Importing modules
-import pygame, sys
+import pygame, interface_nodes, physics_nodes, audio_nodes, sprite_nodes
 from pygame import *
 window = pygame.display# Making alias "window" for "display"
 pygame.init()# Initializing Pygame
 
+
 # Color Pallete
 black = 0,0,0
 
-# Physics classes
-class Body():
-    def __init__(self, name, image):
-        # Setting Variables
+class root():
+    def __init__(self, name, width, height):# Creating Screen
+        # Setting sariables
         self.name = name
-        self.image = pygame.image.load(image)
-        self.speed = [0,0]
-        # Setting Physics
-        self.collider = self.image.get_rect()
-
-# UI classes
-class Screen():
-    def __init__(self, name, size):# Generating Screen
-        # Setting variables
-        self.name = name
-        self.size = size
-        # Initializing the screen
+        self.size = width, height
+        # Initializing Screen
         self.canvas = window.set_mode(self.size)
         window.set_caption(self.name)
 
@@ -38,6 +28,6 @@ class Screen():
         self.canvas.fill(black)
         # Drawing Objects
         for object in objects:
-            self.canvas.blit(object.image, object.collider)
+            self.canvas.blit(object.image, object.motion)
         # Displaying Canvas
         window.flip()
