@@ -1,50 +1,8 @@
-# Importing modules
-import pygame, sys
+import pygame
 from pygame import *
-window = pygame.display# Making alias "window" for "display"
-pygame.init()# Initializing Pygame
+pygame.init()
 
-# Color Pallete
-black = 0,0,0
-
-# Physics classes
-class Body():
-    def __init__(self, image):
-        # Setting variables
-        self.image = pygame.image.load(image)
-        # Setting physics
-        self.speed = [0,0]
-        self.collider = self.image.get_rect()
-
-    def move(self):
-        self.motion = self.collider.move(self.speed)
-
-# UI classes
-class Screen():
-    def __init__(self, name, size):# Creating Screen
-        # Setting sariables
-        self.name = name
-        self.size = size
-        # Initializing Screen
-        self.canvas = window.set_mode(self.size)
-        window.set_caption(self.name)
-
-    def is_closed(self):# Killing program
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-
-    def draw(self, objects):# Drawing Objects
-        # Erasing Canvas
-        self.canvas.fill(black)
-        # Drawing Objects
-        for object in objects:
-            self.canvas.blit(object.image, object.motion)
-        # Displaying Canvas
-        window.flip()
-
-class Macro():
+class macro():
     def __init__(self, key):# Creating key macro
         # Setting Variables
         self.key = self.alias[key]

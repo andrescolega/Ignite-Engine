@@ -17,9 +17,18 @@ As said in the description; "Ignite" uses the Pygame library to work, that's why
 - Pygame Library
 
 # Development Road-Map
-This is the list of goals/features that i plan to add to "Ignite" <<like sticks into the flame!>>:
+I got confused about what is exactly a game engine, so i started to research more about the structure and components of them. I realized i was driving on the wrong way, and now there are many changes to do:
 
-- Complete physics system
-- Complete Sprite system
-- Complete UI system
-- Complete Audio system
+                               Main  
+                                |
+       ___________________ node_handler_________________
+       |                 |             |               |
+    Physics            Audio        Sprites         Interface
+
+                           'Main' Loop
+                                 |
+      Update Nodes ----> Apply Physics ----> Render Images
+
+Having this basic understanding, we can say: the Pygame (as a SDL wrapper) already does a huge part of the work, so i need to focus on developing the node system. For now i have a basic understanding about node developing, because of my experience with the Godot engine.
+
+I really don't like this kind of radical changes, but i think this helped me to have a better understanding of what im doing, knowing this is a personal project to 'learn'.
