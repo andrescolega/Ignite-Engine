@@ -1,11 +1,10 @@
 # Importing modules-------------------------------------------------------------
-import pygame
+import pygame, fuel
 from pygame import *
-import node_handler as nh
 pygame.init()
 
 # Body Node---------------------------------------------------------------------
-class Body(nh.Node):
+class Body(fuel.Node):
 
     def __init__(self, name, image):
         super().__init__(name)

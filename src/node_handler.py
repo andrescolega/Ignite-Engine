@@ -1,5 +1,5 @@
 # Importing modules-------------------------------------------------------------
-import pygame, sys, interface_nodes, physics_nodes, audio_nodes, sprite_nodes
+import pygame, sys, fuel, interface_nodes, physics_nodes, audio_nodes, sprite_nodes
 from pygame import *
 pygame.init()
 sys.path.append('.')
@@ -16,21 +16,8 @@ black = 0,0,0
 error = 'something went wrong..'
 window = pygame.display
 
-# Master Node-------------------------------------------------------------------
-class Node:
-
-    def __init__(self, name):
-        self.name = name
-        self.children = {}
-
-# Adding/Deleting Children------------------------------------------------------
-    def add_child(self, name, node):
-        node = node_types[node]
-        self.children[name] = node(name)
-        pass
-
 # Root Node---------------------------------------------------------------------
-class Root(Node):# Root node
+class Root(fuel.Node):# Root node
 
     def __init__(self, name, width, height):
         super().__init__(name)
@@ -50,16 +37,16 @@ class Root(Node):# Root node
 
 
 # Closing program-----------------------------------------------------------------
-    def check_close_event():
+    def check_close_event(self):
         for event in pygame.event.get():# Checking QUIT event
             if event.type == QUIT:
                 self.running = False
 
-    def close_program():
+    def close_program(self):
         pygame.quit()
 
 # Updating Children-------------------------------------------------------------
-    def update():
+    def update(self):
         try:
             pass
         except: pass
