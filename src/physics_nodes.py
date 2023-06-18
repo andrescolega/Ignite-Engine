@@ -1,15 +1,15 @@
+# Importing modules-------------------------------------------------------------
 import pygame
 from pygame import *
+import node_handler as nh
 pygame.init()
 
-class body():
-    def __init__(self, image):# Creating target
-        # Setting variables
+# Body Node---------------------------------------------------------------------
+class Body(nh.Node):
+
+    def __init__(self, name, image):
+        super().__init__(name)
         self.image = pygame.image.load(image)
-        # Setting physics
         self.speed = [0,0]
         self.collider = self.image.get_rect()
-        self.collider_list = []
-
-    def move(self):
         self.motion = self.collider.move(self.speed)
