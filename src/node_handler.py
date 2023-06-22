@@ -5,8 +5,9 @@ pygame.init()
 sys.path.append('.')
 
 # Node library------------------------------------------------------------------
-node_types = {
-'Body':physics_nodes.Body
+types = {
+'Body':physics_nodes.Body,
+'Level':fuel.Level
 }
 
 # Color Pallete-----------------------------------------------------------------
@@ -19,12 +20,15 @@ window = pygame.display
 # Root Node---------------------------------------------------------------------
 class Root(fuel.Node):# Root node
 
-    def __init__(self, name, width, height):
-        super().__init__(name)
-        self.size = width, height
+    def __init__(self, settings):
+        super().__init__(settings['name'])
+        self.size = settings['width'], settings['height']
         self.running = True
+
+    def init(self):
         self.canvas = window.set_mode(self.size)
         window.set_caption(self.name)
+        self.run()
 
 # Main Loop---------------------------------------------------------------------
     def run(self):
@@ -56,6 +60,6 @@ class Root(fuel.Node):# Root node
         self.canvas.fill(black)# Erasing Canvas
 
         for child in self.children.values():# Drawing Objects
-            self.canvas.blit(child.image, child.motion)
+            self.canvas.blit(child)
 
         window.flip()# Displaying Canvas
