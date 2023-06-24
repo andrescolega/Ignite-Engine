@@ -1,5 +1,9 @@
+# Info--------------------------------------------------------------------------
+# This is the 'root' node. It is the object that letter is exported as the
+# 'game'. It is the reponsible of managing every other node.
+
 # Importing modules-------------------------------------------------------------
-import pygame, sys, fuel, interface_nodes, physics_nodes, audio_nodes, sprite_nodes
+import pygame, sys, node, scene, interface, physics, audio, sprites
 from pygame import *
 pygame.init()
 sys.path.append('.')
@@ -18,48 +22,50 @@ error = 'something went wrong..'
 window = pygame.display
 
 # Root Node---------------------------------------------------------------------
-class Root(fuel.Node):# Root node
+class Root(node.Node):
 
-    def __init__(self, settings):
-        super().__init__(settings['name'])
+    def __init__(self, parent, settings):
+        super().__init__(parent, settings['name'])
         self.size = settings['width'], settings['height']
         self.running = True
+        self.current_scene
 
-    def init(self):
+# Main functions----------------------------------------------------------------
+    def window_init(self):
         self.canvas = window.set_mode(self.size)
         window.set_caption(self.name)
-        self.run()
 
-# Main Loop---------------------------------------------------------------------
-    def run(self):
+    def start_program(self):
+        window_init()
+        run_loop()
+
+    def run_loop(self):
         while self.running:
 
             self.check_close_event()
             self.update()
+            self.draw()
 
         self.close_program()
 
-
-# Closing program-----------------------------------------------------------------
-    def check_close_event(self):
-        for event in pygame.event.get():# Checking QUIT event
+    def check_close_event(self):# Checking QUIT event
+        for event in pygame.event.get():
             if event.type == QUIT:
                 self.running = False
 
     def close_program(self):
         pygame.quit()
 
-# Updating Children-------------------------------------------------------------
+# Updating----------------------------------------------------------------------
     def update(self):
         try:
             pass
         except: pass
 
-# Drawing Children--------------------------------------------------------------
+# Drawing-----------------------------------------------------------------------
     def draw(self, image, motion):
         self.canvas.fill(black)# Erasing Canvas
 
-        for child in self.children.values():# Drawing Objects
-            self.canvas.blit(child)
+            self.canvas.blit(current_scene)
 
         window.flip()# Displaying Canvas
