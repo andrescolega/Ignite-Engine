@@ -9,9 +9,9 @@ class Node:
     def __init__(self, parent, name):
         self.name = name
         self.parent = parent
-        self.children = {}
+        self.children = []
 
 # Adding/Deleting Children------------------------------------------------------
     def add_child(self, types, name, node, data):
         node = types[node]
-        self.children[name] = node(self, name, data)
+        self.children.append(node(self, name, data))

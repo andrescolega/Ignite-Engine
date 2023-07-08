@@ -3,16 +3,15 @@
 # 'game'. It is the reponsible of managing every other node.
 
 # Importing modules-------------------------------------------------------------
-import pygame, sys, node, scene, interface, physics, audio, sprites
+import pygame, sys, node, scenes, physics, audio, sprites
 from pygame import *
 pygame.init()
 sys.path.append('.')
 
 # Node library------------------------------------------------------------------
-types = {
-'Body':physics_nodes.Body,
-'Level':fuel.Level
-}
+types = {'Body':physics.Body,'Scene':scene.Scene}
+
+list = []
 
 # Color Pallete-----------------------------------------------------------------
 black = 0,0,0
@@ -30,14 +29,14 @@ class Root(node.Node):
         self.running = True
         self.current_scene
 
+    def __call__(self):
+        window_init()
+        run_loop()
+
 # Main functions----------------------------------------------------------------
     def window_init(self):
         self.canvas = window.set_mode(self.size)
         window.set_caption(self.name)
-
-    def start_program(self):
-        window_init()
-        run_loop()
 
     def run_loop(self):
         while self.running:
@@ -48,7 +47,7 @@ class Root(node.Node):
 
         self.close_program()
 
-    def check_close_event(self):# Checking QUIT event
+    def check_close_event(self):
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.running = False
@@ -65,7 +64,5 @@ class Root(node.Node):
 # Drawing-----------------------------------------------------------------------
     def draw(self, image, motion):
         self.canvas.fill(black)# Erasing Canvas
-
-            self.canvas.blit(current_scene)
-
+        self.canvas.blit(current_scene)
         window.flip()# Displaying Canvas

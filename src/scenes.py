@@ -4,7 +4,7 @@ from pygame import *
 pygame.init()
 
 # Surface/Escene Node------------------------------------------------------------
-class Scene(Node):
+class Scene2D(node.Node):
     def __init__(self, parent, name, data):
         super().__init__(parent, name)
         self.canvas = pygame.Surface((data[0], data[1]))
