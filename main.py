@@ -1,6 +1,5 @@
 # Importing modules-------------------------------------------------------------
 import sys
-sys.path.append("src")
 import root
 import interface
 # Variables---------------------------------------------------------------------
