@@ -1,7 +1,5 @@
 # Importing modules-------------------------------------------------------------
-import sys
-import root
-import interface
+import sys, ignite, interface
 # Variables---------------------------------------------------------------------
 settings = {'name':'', 'width':100, 'height':100}
 
