@@ -37,18 +37,12 @@ why requires the next dependencies (for the moment):
 
 # Development Road-Map
 
-The Engine is build upon a hierarchical* node model, and it is divided in 4 ranks:
+The Engine is build upon a hierarchical node model, and it is divided in 4 ranks.
 
-ROOT: It is the main node, and responsible of handling every other node and the
-main loop.
+A node of rank 2 only its compatible with a node of rank 1.
+A node of rank 3 only its compatible with a node of rank 2.
+A node of rank 4 only its compatible with a node of rank 3
 
-SCENE: This node handles the 'objects' that are displayed upon it's surface.
+Unranked nodes doesn't fall in any of this rules.
 
-OBJECT: Players, enemies, items, boxes... all are objects.
-
-MODIFIER: This nodes contains the 'rules' that  'object' nodes should follow and
-modify how they behave: Gravity, Controls, Animations.
-
-Knowing this, the road map is to develop each rank hieratically.
-
-#
+Knowing this, the road map is to develop each rank hierarchically.
