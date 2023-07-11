@@ -54,9 +54,9 @@ class Body2D(Node):
 
 class Root(Node):
 
-    def __init__(self, settings):
-        super().__init__(None, settings['name'])
-        self.size = settings['width'], settings['height']
+    def __init__(self, name, width, height):
+        super().__init__(None, name)
+        self.size = width, height
         self.running = True
         self.current_scene
 
