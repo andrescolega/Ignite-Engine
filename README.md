@@ -1,44 +1,54 @@
 # Ignite-Engine
-Game engine powered by the Pygame library.
+Game engine powered by the Pygame-CE library.
 
-It's meant to be a simple and qualified tool for developing games in Python, using "Pygame" that is a "Python extension library
-that wraps the SDL library and its helpers."
+It's meant to be a simple and qualified tool for developing games in Python,
+using "Pygame-CE" that is a "Python extension library that wraps the SDL library
+and its helpers."
+
+The main purpose is to simplify the scripting, so anyone can develop MORE with
+LESS. You can try the 'hello world':
+
+```
+import ignite
+
+game = ignite.Root('My Own Game', 300, 300)
+level = game.add(ignite.Scene2D, [game.size])
+level.current = True
+player = level.add(ignite.Body2D, ['image.png'])
+
+if __name__ == "__main__":
+    game()
+```
 
 # Creator Message
-This game engine was not meant for distribution purposes, it is just a personal project, so, if you find this repo'
-searching for a high level game engine, you should seek somewhere else.
+This game engine was not meant for distribution purposes, it is just a personal
+project for learning, so, if you find this repo' searching for a high level game
+engine, you should seek somewhere else.
 
-In other hand, if you have come just for curiosity, please feel free to contribute and share your opinion about my work.
+In other hand, if you have come just for curiosity, please feel free to
+contribute and share your opinion about my work.
 
 # Dependencies
-As said in the description; "Ignite" uses the Pygame library to work, that's why requires the next dependencies (for the moment):
+As said in the description; "Ignite" uses the Pygame-CE library to work, that's
+why requires the next dependencies (for the moment):
 
 - Python3
-- Pygame Library
+- Pygame-CE Library
 
 # Development Road-Map
-I got confused about what is exactly a game engine, so i started to research more about the structure and components of them. I realized i was driving on the wrong way, and now there are many changes to do:
 
-                               Main  
-                                |
-       ___________________ node_handler_________________
-       |                 |             |               |
-    Physics            Audio        Sprites         Interface
+The Engine is build upon a hierarchical* node model, and it is divided in 4 ranks:
 
-                           'Main' Loop
-                                 |
-      Update Nodes ----> Apply Physics ----> Render Images
+ROOT: It is the main node, and responsible of handling every other node and the
+main loop.
 
-Having this basic understanding, we can say: the Pygame (as a SDL wrapper) already does a huge part of the work, so i need to focus on developing the node system. For now i have a basic understanding about node developing, because of my experience with the Godot engine.
+SCENE: This node handles the 'objects' that are displayed upon it's surface.
 
-I really don't like this kind of radical changes, but i think this helped me to have a better understanding of what im doing, knowing this is a personal project to 'learn'.
+OBJECT: Players, enemies, items, boxes... all are objects.
 
-STAGE 1: Node Handler
-The node handler is a the ROOT node, and is the responsible of 'Main' loop: Updating, Applying physics (running methods) and Rendering images.
+MODIFIER: This nodes contains the 'rules' that  'object' nodes should follow and
+modify how they behave: Gravity, Controls, Animations.
 
-STAGE 2: Physics nodes
-STAGE 3: Sprite nodes
-STAGE 4: Interface Nodes
-STAGE 5: Audio Nodes
-STAGE 6: User interface for Ignite Engine
-STAGE 7: Compiling games
+Knowing this, the road map is to develop each rank hieratically.
+
+#
