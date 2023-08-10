@@ -114,6 +114,7 @@ class Sprite2D(Node):
     def update(self):
         super().update()
         self.parent.image = self.currentFrame
+        self.parent.imageSize = self.currentFrame.get_rect()[2], self.currentFrame.get_rect()[3]
 
 # Body2D Node-------------------------------------------------------------------
 '''Kinematic object for 2D enviroments'''
@@ -124,10 +125,17 @@ class Body2D(Node):
         super().__init__('Body2D', script)
         self.Xspeed = 0
         self.Yspeed = 0
+        self.motion_init()
 
-    def apply_speed(self):
-        self.collider = self.image.get_rect()
-        self.motion = self.collider.move((self.Xspeed, self.Yspeed))# Update motion and collider variables
+    def motion_init(self):
+        self.position = (0,0)
+        self.collider = pygame.Rect((self.position),(1,1))
+        self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+
+    def apply_speed(self):# Update position and collider variables
+        self.collider = pygame.Rect((self.position), (self.imageSize))
+        self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+        self.position = self.motion[0], self.motion[1]
 
     def update(self):
         super().update()
