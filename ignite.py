@@ -1,8 +1,6 @@
 #=============================== Ignite Engine =================================
 """-----------------THIS CODE IS UNDER THE GNU v3.0 LICENSE------------------"""
 
-
-#============================ NO OBJECT-BASED CODE =============================
 # Importing modules-------------------------------------------------------------
 import pygame, sys, os
 from pygame import *
@@ -15,8 +13,6 @@ black = 0,0,0
 error = 'something went wrong..'
 window = pygame.display
 sprite = pygame.sprite.Sprite
-
-#==================================== SEED =====================================
 
 # Node Class--------------------------------------------------------------------
 class Node:
@@ -36,8 +32,6 @@ class Node:
         for child in self.children:
             child.update()
         if self.script != None:self.script(self)
-
-# UNRANKED NODES ===============================================================
 
 # Button Node-------------------------------------------------------------------
 '''This node execute a function an specific key event happens'''
@@ -102,10 +96,9 @@ class physicButton(Node):
     'f5':pygame.K_F5,'f6':pygame.K_F6,'f7':pygame.K_F7,'f8':pygame.K_F8,
     'f9':pygame.K_F9,'f10':pygame.K_F10,'f11':pygame.K_F11,'f12':pygame.K_F12,
     }
-# RANK 4 =======================================================================
 
 # Sprite2D Node-----------------------------------------------------------------
-
+'''This node manages images and animations'''
 
 class Sprite2D(Node):
     def __init__(self, images, script=None):
@@ -122,9 +115,9 @@ class Sprite2D(Node):
         super().update()
         self.parent.image = self.currentFrame
 
-# RANK 3 =======================================================================
-
 # Body2D Node-------------------------------------------------------------------
+'''Kinematic object for 2D enviroments'''
+
 class Body2D(Node):
 
     def __init__(self, script=None):
@@ -134,15 +127,15 @@ class Body2D(Node):
 
     def apply_speed(self):
         self.collider = self.image.get_rect()
-        self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+        self.motion = self.collider.move((self.Xspeed, self.Yspeed))# Update motion and collider variables
 
     def update(self):
         super().update()
         self.apply_speed()
 
-# RANK 2 =======================================================================
-
 # Scene2D Node------------------------------------------------------------------
+'''This node manages other 2D objects in a single stage'''
+
 class Scene2D(Node):
     def __init__(self, size, script=None):
         super().__init__('Scene2D', script)
@@ -165,7 +158,6 @@ class Scene2D(Node):
         for child in self.children:# Drawing Objects
             try:self.canvas.blit(child.image, child.motion)
             except (AttributeError): pass
-# RANK 1 =======================================================================
 
 # Root Node---------------------------------------------------------------------
 """
