@@ -23,6 +23,9 @@ class Node:
         self.children = []
         self.script = script
 
+    def __repr__(self):
+        return f'<{self.name} -> children({len(self.children)})>'
+
     def add(self, node):# Add Child Node
         node.parent = self
         self.children.append(node)
@@ -38,7 +41,7 @@ class Node:
 
 class physicButton(Node):
     def __init__(self, button, script=None):
-        super().__init__('physicButton', script)
+        super().__init__(self.__class__.__name__, script)
         self.combo = button.split('+')
         self.keys = []
         for key in self.combo:
@@ -102,7 +105,7 @@ class physicButton(Node):
 
 class Sprite2D(Node):
     def __init__(self, images, script=None):
-        super().__init__('Sprite2D', script)
+        super().__init__(self.__class__.__name__, script)
         self.frames = []
         self.load_images(images)
         self.currentFrame = self.frames[0]
@@ -122,43 +125,62 @@ class Sprite2D(Node):
 class Body2D(Node):
 
     def __init__(self, script=None):
-        super().__init__('Body2D', script)
+        super().__init__(self.__class__.__name__, script)
         self.Xspeed = 0
         self.Yspeed = 0
+        self.position = (0,0)
+        self.isColliding = False
+        self.bodyColliding = None
         self.motion_init()
 
-    def motion_init(self):
-        self.position = (0,0)
-        self.collider = pygame.Rect((self.position),(1,1))
-        self.motion = self.collider.move((self.Xspeed, self.Yspeed))
-
-    def apply_speed(self):# Update position and collider variables
-        self.collider = pygame.Rect((self.position), (self.imageSize))
-        self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+    def motion_init(self):# Defines collider and motion variables (also called when there is no sprite)
+        self.collisionBox = pygame.Rect((self.position),(1,1))
+        self.motion = self.collisionBox.move((self.Xspeed, self.Yspeed))
         self.position = self.motion[0], self.motion[1]
 
     def update(self):
         super().update()
         self.apply_speed()
 
+    def apply_speed(self):# Update position and collider variables
+        try:
+            self.collider = pygame.Rect((self.position), (self.imageSize))
+            self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+            self.position = self.motion[0], self.motion[1]
+        except (AttributeError):
+            self.motion_init()
+
 # Scene2D Node------------------------------------------------------------------
 '''This node manages other 2D objects in a single stage'''
 
 class Scene2D(Node):
     def __init__(self, size, script=None):
-        super().__init__('Scene2D', script)
+        super().__init__(self.__class__.__name__, script)
         self.canvas = pygame.Surface(size)
         self.position = self.canvas.get_rect()
         self.current = False
+
+    def update(self):
+        super().update()
+        self.check_current()
+        self.check_collision()
+        self.draw()
 
     def check_current(self):# Check if self is tagged as the current scene
         if self.current == True:
             self.parent.currentScene = self
 
-    def update(self):# Update node and children
-        super().update()
-        self.check_current()
-        self.draw()
+    def check_collision(self):# Check for collisions between children
+        for childA in self.children:
+            for childB in self.children:
+                try:
+                    check = pygame.Rect.colliderect(childA.collider, childB.collider)
+                    childA.isColliding = check
+                    if check == True:
+                        childA.collision = childB
+                    else:
+                        childA.collision = None
+                except (AttributeError): pass
 
     def draw(self):
         self.canvas.fill(black)# Erasing Canvas
