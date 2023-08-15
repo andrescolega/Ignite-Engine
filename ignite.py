@@ -1,7 +1,7 @@
 #=============================== Ignite Engine =================================
 """-----------------THIS CODE IS UNDER THE GNU v3.0 LICENSE------------------"""
 
-# Importing modules-------------------------------------------------------------
+# Importing Modules-------------------------------------------------------------
 import pygame, sys, os
 from pygame import *
 pygame.init()
@@ -110,15 +110,18 @@ class Sprite2D(Node):
         self.load_images(images)
         self.currentFrame = self.frames[0]
 
+
     def load_images(self, images):
         for image in images:
             self.frames.append(pygame.image.load(image))
 
     def update(self):
         super().update()
+        self.set_parent_image()
+
+    def set_parent_image(self):
         self.parent.image = self.currentFrame
         self.parent.imageSize = self.currentFrame.get_rect()[2], self.currentFrame.get_rect()[3]
-
 # Body2D Node-------------------------------------------------------------------
 '''Kinematic object for 2D enviroments'''
 
@@ -129,26 +132,43 @@ class Body2D(Node):
         self.Xspeed = 0
         self.Yspeed = 0
         self.position = (0,0)
+        self.collisionBoxpadding = 0
         self.isColliding = False
         self.bodyColliding = None
+        self.isSolid = False
         self.motion_init()
 
-    def motion_init(self):# Defines collider and motion variables (also called when there is no sprite)
+    def motion_init(self):# Defines collisionBox and motion variables (also called when there is no sprite)
         self.collisionBox = pygame.Rect((self.position),(1,1))
         self.motion = self.collisionBox.move((self.Xspeed, self.Yspeed))
         self.position = self.motion[0], self.motion[1]
 
     def update(self):
         super().update()
+        self.apply_collision()
         self.apply_speed()
 
-    def apply_speed(self):# Update position and collider variables
+    def apply_speed(self):# Update position and collisionBox variables
         try:
-            self.collider = pygame.Rect((self.position), (self.imageSize))
-            self.motion = self.collider.move((self.Xspeed, self.Yspeed))
+            self.collisionBox = pygame.Rect((self.position), (self.imageSize))
+            self.motion = self.collisionBox.move((self.Xspeed, self.Yspeed))
             self.position = self.motion[0], self.motion[1]
         except (AttributeError):
             self.motion_init()
+
+    def apply_collision(self):
+        if self.bodyColliding != None and self.isColliding:
+            # X speed stopping
+            if self.collisionBox.right >= self.bodyColliding.position[0]: # Moving Right
+                self.Xspeed -= self.Xspeed
+            if self.collisionBox.left <= self.bodyColliding.collisionBox.right: # Moving Left
+                self.Xspeed += self.Xspeed*-1
+            # Y speed stopping
+            if self.collisionBox.top <= self.bodyColliding.collisionBox.bottom: # Moving Up
+                self.Yspeed += self.Yspeed*-1
+            if self.collisionBox.bottom >= self.bodyColliding.collisionBox.top: # Moving down
+                self.Yspeed -= self.Yspeed
+                print('a')
 
 # Scene2D Node------------------------------------------------------------------
 '''This node manages other 2D objects in a single stage'''
@@ -174,12 +194,19 @@ class Scene2D(Node):
         for childA in self.children:
             for childB in self.children:
                 try:
-                    check = pygame.Rect.colliderect(childA.collider, childB.collider)
-                    childA.isColliding = check
-                    if check == True:
-                        childA.collision = childB
-                    else:
-                        childA.collision = None
+                    if childA != childB:
+                        xoffset = childA.collisionBox[0] - childB.collisionBox[0]
+                        yoffset = childA.collisionBox[1] - childB.collisionBox[1]
+                        leftmask = pygame.mask.from_surface(childA.image)
+                        rightmask = pygame.mask.from_surface(childB.image)
+                        check = leftmask.overlap(rightmask, (xoffset, yoffset))
+                        print(check)
+                        #check = pygame.Rect.colliderect(childA.collisionBox, childB.collisionBox)
+                        childA.isColliding = check
+                        if check == True and childB.isSolid == True:
+                            childA.bodyColliding = childB
+                        else:
+                            childA.bodyColliding = None
                 except (AttributeError): pass
 
     def draw(self):
